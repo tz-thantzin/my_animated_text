@@ -88,25 +88,6 @@ class _ScaleTextAnimationState extends State<_ScaleTextAnimation>
     _animation = Tween(begin: 0.2, end: 1.2).animate(
       CurvedAnimation(parent: widget.controller, curve: Curves.easeInOut),
     );
-
-    if (widget.autoStart) {
-      _startAnimation();
-    }
-  }
-
-  /// Starts the scaling animation depending on the [AnimatedTextMode].
-  void _startAnimation() {
-    switch (widget.mode) {
-      case AnimatedTextMode.forward:
-        widget.controller.forward();
-        break;
-      case AnimatedTextMode.reverse:
-        widget.controller.reverse();
-        break;
-      case AnimatedTextMode.loop:
-        widget.controller.repeat(reverse: true);
-        break;
-    }
   }
 
   @override

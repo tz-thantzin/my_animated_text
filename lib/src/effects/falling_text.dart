@@ -101,25 +101,6 @@ class _FallingTextAnimationState extends State<_FallingTextAnimation> {
         ),
       );
     });
-
-    if (widget.autoStart) {
-      _startAnimation();
-    }
-  }
-
-  /// Starts the animation based on the selected [AnimatedTextMode].
-  void _startAnimation() {
-    switch (widget.mode) {
-      case AnimatedTextMode.forward:
-        widget.controller.forward();
-        break;
-      case AnimatedTextMode.reverse:
-        widget.controller.reverse();
-        break;
-      case AnimatedTextMode.loop:
-        widget.controller.repeat();
-        break;
-    }
   }
 
   @override

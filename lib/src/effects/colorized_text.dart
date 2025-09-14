@@ -105,26 +105,6 @@ class _ColorizedTextAnimationState extends State<_ColorizedTextAnimation>
     }
 
     _colorAnimation = TweenSequence(items).animate(widget.controller);
-
-    if (widget.autoStart) {
-      _startAnimation();
-    }
-  }
-
-  /// Starts the animation depending on the [AnimatedTextMode].
-  void _startAnimation() {
-    switch (widget.mode) {
-      case AnimatedTextMode.forward:
-        widget.controller.forward();
-        break;
-      case AnimatedTextMode.reverse:
-        widget.controller.reverse();
-        break;
-      case AnimatedTextMode.loop:
-        // Looping animation with smooth reversible transitions
-        widget.controller.repeat(reverse: true);
-        break;
-    }
   }
 
   @override

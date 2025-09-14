@@ -74,30 +74,6 @@ class _FadeTextAnimation extends StatefulWidget {
 
 class _FadeTextAnimationState extends State<_FadeTextAnimation> {
   @override
-  void initState() {
-    super.initState();
-
-    if (widget.autoStart) {
-      _startAnimation();
-    }
-  }
-
-  /// Starts the fade animation based on the selected [AnimatedTextMode].
-  void _startAnimation() {
-    switch (widget.mode) {
-      case AnimatedTextMode.forward:
-        widget.controller.forward();
-        break;
-      case AnimatedTextMode.reverse:
-        widget.controller.reverse();
-        break;
-      case AnimatedTextMode.loop:
-        widget.controller.repeat();
-        break;
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     final animation = Tween<double>(
       begin: 0.0,

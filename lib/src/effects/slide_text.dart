@@ -92,24 +92,6 @@ class _SlideTextAnimationState extends State<_SlideTextAnimation> {
       begin: 0.0,
       end: 1.0,
     ).animate(CurvedAnimation(parent: widget.controller, curve: Curves.easeIn));
-
-    if (widget.autoStart) {
-      _startAnimation();
-    }
-  }
-
-  void _startAnimation() {
-    switch (widget.mode) {
-      case AnimatedTextMode.forward:
-        widget.controller.forward();
-        break;
-      case AnimatedTextMode.reverse:
-        widget.controller.reverse();
-        break;
-      case AnimatedTextMode.loop:
-        widget.controller.repeat(reverse: true);
-        break;
-    }
   }
 
   @override

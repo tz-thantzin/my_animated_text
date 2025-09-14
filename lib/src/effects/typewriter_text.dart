@@ -32,7 +32,7 @@ class TypewriterText extends AnimatedTextBase {
     super.text, {
     super.key,
     super.style,
-    super.duration = const Duration(milliseconds: 300),
+    super.duration = const Duration(milliseconds: 3000),
     super.autoStart,
     super.controller,
     super.onStarted,
@@ -91,24 +91,6 @@ class _TypewriterTextAnimationState extends State<_TypewriterTextAnimation> {
       begin: 0,
       end: widget.text.length,
     ).animate(CurvedAnimation(parent: widget.controller, curve: Curves.linear));
-
-    if (widget.autoStart) {
-      _startAnimation();
-    }
-  }
-
-  void _startAnimation() {
-    switch (widget.mode) {
-      case AnimatedTextMode.forward:
-        widget.controller.forward();
-        break;
-      case AnimatedTextMode.reverse:
-        widget.controller.reverse();
-        break;
-      case AnimatedTextMode.loop:
-        widget.controller.repeat();
-        break;
-    }
   }
 
   @override

@@ -31,6 +31,12 @@ dependencies:
   my_animated_tex: ^0.0.1
 ```
 
+or 
+
+```bash
+ $ flutter pub add my_animated_text
+```
+
 Then, run:
 
 ```bash
@@ -202,3 +208,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 * GitHub Home: [https://github.com/tz-thantzin](https://github.com/tz-thantzin)
 * Repository: [https://github.com/tz-thantzin/my\_animated\_text](https://github.com/tz-thantzin/my_animated_text)
+
+Copyright (©️) 2025 __Thant Zin__

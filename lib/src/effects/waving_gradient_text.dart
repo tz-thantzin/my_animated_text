@@ -86,28 +86,6 @@ class _WavingGradientTextAnimation extends StatefulWidget {
 class _WavingGradientTextAnimationState
     extends State<_WavingGradientTextAnimation> {
   @override
-  void initState() {
-    super.initState();
-    if (widget.autoStart) {
-      _startAnimation();
-    }
-  }
-
-  void _startAnimation() {
-    switch (widget.mode) {
-      case AnimatedTextMode.forward:
-        widget.controller.forward();
-        break;
-      case AnimatedTextMode.reverse:
-        widget.controller.reverse();
-        break;
-      case AnimatedTextMode.loop:
-        widget.controller.repeat();
-        break;
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     final Alignment beginAlignment =
         widget.direction == WavingDirection.leftToRight
@@ -140,11 +118,7 @@ class _WavingGradientTextAnimationState
             widget.text,
             style:
                 widget.style?.copyWith(color: Colors.white) ??
-                const TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
+                const TextStyle().copyWith(color: Colors.white),
           ),
         );
       },

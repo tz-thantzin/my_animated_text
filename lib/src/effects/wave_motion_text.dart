@@ -68,28 +68,6 @@ class _WaveMotionTextAnimation extends StatefulWidget {
 
 class _WaveMotionTextAnimationState extends State<_WaveMotionTextAnimation> {
   @override
-  void initState() {
-    super.initState();
-    if (widget.autoStart) {
-      _startAnimation();
-    }
-  }
-
-  void _startAnimation() {
-    switch (widget.mode) {
-      case AnimatedTextMode.forward:
-        widget.controller.forward();
-        break;
-      case AnimatedTextMode.reverse:
-        widget.controller.reverse();
-        break;
-      case AnimatedTextMode.loop:
-        widget.controller.repeat();
-        break;
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     final characters = widget.text.characters.toList();
 

@@ -89,25 +89,6 @@ class _RotationTextAnimationState extends State<_RotationTextAnimation>
     _rotation = Tween(begin: -0.1, end: 0.1).animate(
       CurvedAnimation(parent: widget.controller, curve: Curves.easeInOut),
     );
-
-    if (widget.autoStart) {
-      _startAnimation();
-    }
-  }
-
-  /// Starts the rotation animation depending on the [AnimatedTextMode].
-  void _startAnimation() {
-    switch (widget.mode) {
-      case AnimatedTextMode.forward:
-        widget.controller.forward();
-        break;
-      case AnimatedTextMode.reverse:
-        widget.controller.reverse();
-        break;
-      case AnimatedTextMode.loop:
-        widget.controller.repeat();
-        break;
-    }
   }
 
   @override
