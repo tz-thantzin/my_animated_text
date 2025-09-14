@@ -28,9 +28,7 @@ Add the following dependency to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  my_animated_text:
-    git:
-      url: https://github.com/tz-thantzin/my_animated_text.git
+  my_animated_tex: ^0.0.1
 ```
 
 Then, run:
