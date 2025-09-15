@@ -19,6 +19,8 @@
 * **MarqueeText**: Moves text horizontally like a marquee.
 * **FallingText**: Makes each character fall into place.
 * **ColorizedText**: Animates text through multiple colors.
+* **BouncingText**: Animates each character with a bouncing effect from left to right or right to left.
+* **ShadowText**: Animates text shadow effect.
 
 ---
 
@@ -28,7 +30,7 @@ Add the following dependency to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  my_animated_tex: ^0.0.1
+  my_animated_tex: ^{version}
 ```
 
 or 
@@ -155,6 +157,25 @@ ColorizedText(
   'Colorful Text',
   colors: [Colors.red, Colors.yellow, Colors.blue],
   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+)
+```
+
+### BouncingText
+
+```dart
+BouncingText(
+  'Bouncing Text',
+  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+)
+```
+
+### ShadowText
+
+```dart
+ShadowText(
+  'Shadow Text',
+  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+  mode: AnimatedTextMode.reverseLoop,
 )
 ```
 

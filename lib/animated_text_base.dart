@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// Defines how the animated text should play.
-enum AnimatedTextMode { forward, reverse, loop }
+enum AnimatedTextMode { forward, reverse, loop, reverseLoop }
 
 /// Base class for creating custom animated text widgets.
 ///
@@ -102,14 +102,18 @@ class _AnimatedTextBaseState extends State<AnimatedTextBase>
       case AnimationStatus.completed:
         widget.onCompleted?.call();
         if (widget.mode == AnimatedTextMode.loop) {
-          controller.repeat();
+          widget.onRepeated?.call();
+        } else if (widget.mode == AnimatedTextMode.reverseLoop) {
           widget.onRepeated?.call();
         }
         break;
       case AnimationStatus.reverse:
-        widget.onRepeated?.call();
+        if (widget.mode == AnimatedTextMode.reverseLoop) {
+          widget.onRepeated?.call();
+        }
         break;
-      default:
+      case AnimationStatus.dismissed:
+        // Nothing to do: repeat(reverse:true) handles it
         break;
     }
   }
@@ -120,10 +124,13 @@ class _AnimatedTextBaseState extends State<AnimatedTextBase>
         controller.forward();
         break;
       case AnimatedTextMode.reverse:
-        controller.reverse();
+        controller.reverse(from: 1.0);
         break;
       case AnimatedTextMode.loop:
         controller.repeat();
+        break;
+      case AnimatedTextMode.reverseLoop:
+        controller.repeat(reverse: true); // automatic back-and-forth
         break;
     }
   }
