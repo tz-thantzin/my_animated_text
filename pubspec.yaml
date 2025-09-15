@@ -1,5 +1,5 @@
 name: my_animated_text
-description: "my_animated_text is a Flutter package that provides a collection of customizable animated text widgets, including typewriter, slide, wave, gradient, shimmer, and more, to make your app's text dynamic and visually engaging."
+description: "A Flutter package with customizable animated text widgets for dynamic and engaging text effects."
 version: 1.0.0
 homepage: https://github.com/tz-thantzin/my_animated_text
 maintainer: ThantZin (@tz-thantzin)
