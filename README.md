@@ -33,7 +33,7 @@ dependencies:
   my_animated_tex: ^{version}
 ```
 
-or 
+or run below in your terminal
 
 ```bash
  $ flutter pub add my_animated_text
@@ -42,7 +42,7 @@ or
 Then, run:
 
 ```bash
-flutter pub get
+ $ flutter pub get
 ```
 
 ---

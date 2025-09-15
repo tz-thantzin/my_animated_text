@@ -21,3 +21,7 @@
 
 * **BouncingText**: Animates each character with a bouncing effect from left to right or right to left.
 * **ShadowText**: Animates text shadow effect.
+
+## 1.0.1
+
+- Add publisher in pubspec.yaml
