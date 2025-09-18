@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../my_animated_text.dart';
-import '../src/animated_text/config/text_effect.dart';
+import '../../my_animated_text.dart';
+import '../config/text_effect.dart';
 
 class BounceEffect extends TextEffect {
   final double jumpHeight;
@@ -11,6 +11,9 @@ class BounceEffect extends TextEffect {
     this.jumpHeight = 12.0,
     this.direction = TextAnimationDirection.leftToRight,
   });
+
+  @override
+  EffectLayer get layer => EffectLayer.character;
 
   @override
   Widget build(
@@ -51,12 +54,13 @@ class BounceEffect extends TextEffect {
     return AnimatedBuilder(
       animation: controller,
       builder: (_, __) {
-        return Row(
-          mainAxisSize: MainAxisSize.min,
-          children: List.generate(text.length, (i) {
+        return Wrap(
+          spacing: 0,
+          runSpacing: 0,
+          children: List.generate(charCount, (i) {
             return Transform.translate(
               offset: Offset(0, animations[i].value),
-              child: Text(text[i], style: style),
+              child: Text(text[i], style: style, softWrap: true),
             );
           }),
         );

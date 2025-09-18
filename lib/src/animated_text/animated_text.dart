@@ -1,0 +1,15 @@
+export 'bouncing_text.dart';
+export 'circling_text.dart';
+export 'colorized_text.dart';
+export 'fade_text.dart';
+export 'falling_text.dart';
+export 'marquee_text.dart';
+export 'multi_animated_text.dart';
+export 'rotation_text.dart';
+export 'scale_text.dart';
+export 'shadow_text.dart';
+export 'shimmer_text.dart';
+export 'slide_text.dart';
+export 'typewriter_text.dart';
+export 'wave_motion_text.dart';
+export 'waving_gradient_text.dart';

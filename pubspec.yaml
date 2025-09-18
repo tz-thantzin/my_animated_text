@@ -1,11 +1,10 @@
 name: my_animated_text
 description: "A Flutter package with customizable animated text widgets for dynamic and engaging text effects."
-version: 1.0.1
+version: 2.0.0
 homepage: https://github.com/tz-thantzin/my_animated_text
 repository: https://github.com/tz-thantzin/my_animated_text
 issue_tracker: https://github.com/tz-thantzin/my_animated_text/issues
 maintainer: ThantZin (@tz-thantzin)
-author: Thant Zin <dev.thantzin@gmail.com>
 publisher: devthantzin.com
 
 environment:

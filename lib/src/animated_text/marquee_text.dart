@@ -1,4 +1,4 @@
-import '../my_animated_text.dart';
+import '../../my_animated_text.dart';
 
 /// ## MarqueeText
 ///
@@ -47,6 +47,6 @@ class MarqueeText extends MultiAnimatedText {
     double speed = 50.0,
     double spacing = 50.0,
   }) : super(
-         effects: [MarqueeEffect(speed: speed, spacing: spacing)],
+         effects: [MarqueeEffect(speed: speed, mode: mode)],
        );
 }

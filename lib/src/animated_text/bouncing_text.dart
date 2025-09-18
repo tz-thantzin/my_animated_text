@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../animated_text_base.dart';
-import 'effects/bouncing_effect.dart';
+import '../../animated_text_base.dart';
+import '../effects/bouncing_effect.dart';
 import 'multi_animated_text.dart';
 
 enum TextAnimationDirection { leftToRight, rightToLeft }

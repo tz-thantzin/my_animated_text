@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 
-import '../src/animated_text/config/text_effect.dart';
+import '../config/text_effect.dart';
 
 class ColorizeEffect extends TextEffect {
   final List<Color> colors;
 
-  ColorizeEffect({required this.colors});
+  @override
+  EffectLayer get layer => EffectLayer.widget;
 
+  ColorizeEffect({
+    this.colors = const [Colors.red, Colors.blue, Colors.green, Colors.orange],
+  });
   @override
   Widget build(
     BuildContext context,
@@ -15,27 +19,24 @@ class ColorizeEffect extends TextEffect {
     TextStyle? style,
     Widget child,
   ) {
-    // Build tween sequence that transitions between given colors
-    final items = <TweenSequenceItem<Color?>>[];
-    for (int i = 0; i < colors.length - 1; i++) {
-      items.add(
-        TweenSequenceItem<Color?>(
-          tween: ColorTween(begin: colors[i], end: colors[i + 1]),
-          weight: 1.0,
-        ),
-      );
-    }
-    final animation = TweenSequence<Color?>(items).animate(controller);
+    final textStyle = style ?? const TextStyle();
 
-    // Use ColorFiltered to recolor the rendered child to `animation.value`.
-    // This overrides explicit colors and works for transformed/stacked text.
     return AnimatedBuilder(
-      animation: animation,
+      animation: controller,
       builder: (context, _) {
-        final color = animation.value ?? Colors.transparent;
-        return ColorFiltered(
-          colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
-          child: child,
+        final totalColors = colors.length;
+        final progress = (controller.value * totalColors) % totalColors;
+        final index = progress.floor();
+        final nextIndex = (index + 1) % totalColors;
+        final t = progress - index;
+        final currentColor = Color.lerp(colors[index], colors[nextIndex], t)!;
+
+        return ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: double.infinity),
+          child: DefaultTextStyle.merge(
+            style: textStyle.copyWith(color: currentColor),
+            child: child,
+          ),
         );
       },
     );

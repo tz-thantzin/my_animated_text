@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../my_animated_text.dart';
+import '../../my_animated_text.dart';
 
 /// Default set of colors used in [ColorizedText] animation
 const defaultColorizeColors = [

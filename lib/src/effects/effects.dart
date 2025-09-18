@@ -1,3 +1,14 @@
 export 'bouncing_effect.dart';
 export 'circling_effect.dart';
 export 'colorized_effect.dart';
+export 'fade_effect.dart';
+export 'falling_effect.dart';
+export 'marquee_effect.dart';
+export 'rotation_effect.dart';
+export 'scale_effect.dart';
+export 'shadow_effect.dart';
+export 'shimmer_effect.dart';
+export 'slide_effect.dart';
+export 'typewriter_effect.dart';
+export 'wave_motion_effect.dart';
+export 'waving_gradient_effect.dart';

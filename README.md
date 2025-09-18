@@ -12,15 +12,17 @@
 * **TypewriterText**: Simulates a typewriter effect, revealing text character by character.
 * **WaveMotionText**: Applies a sinusoidal wave motion to each character.
 * **WavingGradientText**: Applies a waving gradient effect to the text.
-* **ShimmerText**: Applies a shimmer shine effect to the text.
+* **ShimmerText**: Creates a shimmer shine effect.
 * **FadeText**: Fades text in/out.
 * **ScaleText**: Scales text up and down.
 * **RotationText**: Rotates text back and forth.
 * **MarqueeText**: Moves text horizontally like a marquee.
 * **FallingText**: Makes each character fall into place.
 * **ColorizedText**: Animates text through multiple colors.
-* **BouncingText**: Animates each character with a bouncing effect from left to right or right to left.
-* **ShadowText**: Animates text shadow effect.
+* **BouncingText**: Animates each character with a bouncing effect.
+* **ShadowText**: Animates text shadows.
+* **CirclingText**: Animates text in a circular path.
+* **MultiAnimatedText**: Combine multiple effects for a single text widget (e.g., Falling + Colorized).
 
 ---
 
@@ -30,11 +32,11 @@ Add the following dependency to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  my_animated_tex: ^{version}
+  my_animated_text: ^{version}
 ```
 
 or run below in your terminal
-
+ 
 ```bash
  $ flutter pub add my_animated_text
 ```
@@ -128,7 +130,19 @@ ScaleText(
 RotationText(
   'Rotating Text',
   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+  rotationDirection: RotationDirection.custom,
+  rotationDegrees: 180, 
 )
+```
+
+```dart
+CirclingText(
+    'Circling Text Circling Text ',
+    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+    mode: AnimatedTextMode.loop,
+    direction: CirclingDirection.clockwise,
+    radius: 45,
+),
 ```
 
 ### MarqueeText
@@ -178,6 +192,26 @@ ShadowText(
   mode: AnimatedTextMode.reverseLoop,
 )
 ```
+
+### MultiAnimatedText
+
+```dart
+MultiAnimatedText(
+  'Falling & Colorized!',
+  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+  effects: [  
+    FallingEffect(),
+    ColorizeEffect(colors: [Colors.red, Colors.yellow, Colors.blue])
+  ],
+  mode: AnimatedTextMode.loop,
+)
+```
+
+```dart
+BouncingText(
+  'Bounce Effect with Fade and Colorized!',
+).withEffects([FadeEffect(), ColorizeEffect()]),
+``` 
 
 ---
 
