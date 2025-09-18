@@ -5,7 +5,6 @@ homepage: https://github.com/tz-thantzin/my_animated_text
 repository: https://github.com/tz-thantzin/my_animated_text
 issue_tracker: https://github.com/tz-thantzin/my_animated_text/issues
 maintainer: ThantZin (@tz-thantzin)
-publisher: devthantzin.com
 
 environment:
   sdk: ^3.9.2
