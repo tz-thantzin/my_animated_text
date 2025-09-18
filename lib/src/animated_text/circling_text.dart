@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_animated_text/src/config/duration.dart';
 
-import '../my_animated_text.dart';
+import '../../my_animated_text.dart';
 
 enum CirclingDirection { clockwise, anticlockwise }
 
@@ -38,7 +38,6 @@ enum CirclingDirection { clockwise, anticlockwise }
 /// - `mode`: Animation mode: loop, forward, or reverse. Defaults to loop.
 /// - `autoStart`: Automatically start animation if true.
 /// - `controller`: Optional external [AnimationController] for custom control.
-/// - `radius`: Circle radius. Defaults to `40.0`.
 /// - `minLetterPadding`: Minimum space between letters. Defaults to `2.0`.
 /// - `direction`: Rotation direction, clockwise or anticlockwise. Defaults to anticlockwise.
 class CirclingText extends MultiAnimatedText {
@@ -53,14 +52,12 @@ class CirclingText extends MultiAnimatedText {
     super.onStarted,
     super.onCompleted,
     super.onRepeated,
-    double radius = 40.0,
     double minLetterPadding = 2.0,
     CirclingDirection direction = CirclingDirection.anticlockwise,
   }) : super(
          effects: [
            CirclingEffect(
              direction: direction,
-             radius: radius,
              minLetterPadding: minLetterPadding,
            ),
          ],

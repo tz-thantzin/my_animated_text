@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../my_animated_text.dart';
+import '../../my_animated_text.dart';
 
 ///
 /// The [ScaleText] widget applies a scaling effects to the given text

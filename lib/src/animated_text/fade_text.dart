@@ -1,5 +1,4 @@
-import '../my_animated_text.dart';
-import 'effects/fade_effect.dart';
+import '../../my_animated_text.dart';
 
 /// ## FadeText
 ///
