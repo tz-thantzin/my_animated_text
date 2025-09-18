@@ -14,7 +14,7 @@ This example showcases all text animations included in the package:
 * **TypewriterText**: Reveals text character by character.
 * **WaveMotionText**: Creates wave motion for each character.
 * **WavingGradientText**: Gradient text with waving animation.
-* **ShimmerText**: Shimmer/shine effect on text.
+* **ShimmerText**: Shimmer/shine effects on text.
 * **FadeText**: Fading in and out.
 * **ScaleText**: Scaling up and down.
 * **RotationText**: Rotates back and forth.

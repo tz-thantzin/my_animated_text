@@ -26,17 +26,56 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textStyle = const TextStyle(fontSize: 24, color: Colors.orange);
+    final textStyle = const TextStyle(fontSize: 18, color: Colors.orange);
 
     final demos = [
-      const ColorizedText(
+      BouncingText(
+        'Bounce Effect with Fade and Colorized!',
+      ).withEffects([FadeEffect(), ColorizeEffect()]),
+      ScaleText(
+        'Scale Text with wave gradient',
+      ).withEffect(WaveGradientEffect()),
+      MultiAnimatedText(
+        "Circling Text Effect with colorized",
+        mode: AnimatedTextMode.loop,
+        effects: [CirclingEffect(), ColorizeEffect()],
+      ),
+
+      MultiAnimatedText(
+        "Falling Text Effect with Colorized",
+        mode: AnimatedTextMode.loop,
+        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        effects: [FallingEffect(), ColorizeEffect()],
+      ),
+
+      MultiAnimatedText(
+        "Waving Text Effect with Typewriter",
+        mode: AnimatedTextMode.loop,
+        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        effects: [WaveGradientEffect(), TypewriterEffect()],
+      ),
+
+      MultiAnimatedText(
+        "Rotation Text Effect",
+        mode: AnimatedTextMode.loop,
+        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        effects: [
+          RotationEffect(
+            rotationDirection: RotationDirection.clockwise,
+            rotationDegrees: 180,
+          ),
+          WaveGradientEffect(),
+          ShadowEffect(),
+        ],
+      ),
+      ColorizedText(
         'Colorized Text',
-        style: TextStyle(fontSize: 24),
+        style: TextStyle(fontSize: 18),
         mode: AnimatedTextMode.loop,
       ),
-      const WavingGradientText(
+      WavingGradientText(
         'Waving Text',
-        style: TextStyle(fontSize: 24),
+        style: TextStyle(fontSize: 18),
         mode: AnimatedTextMode.loop,
       ),
       FadeText('Fade Text', style: textStyle, mode: AnimatedTextMode.loop),
@@ -69,25 +108,34 @@ class HomeView extends StatelessWidget {
         'Rotation Text',
         style: textStyle,
         mode: AnimatedTextMode.loop,
+        rotationDirection: RotationDirection.custom,
+        rotationDegrees: 180,
+      ),
+      CirclingText(
+        'Circling Text with clockwise direction',
+        style: textStyle,
+        mode: AnimatedTextMode.loop,
+        direction: CirclingDirection.clockwise,
       ),
       WaveMotionText(
         'Wave Motion Text',
         style: textStyle,
         mode: AnimatedTextMode.loop,
       ),
-      const ShimmerText(
+      ShimmerText(
         'Shimmer Text',
-        style: TextStyle(fontSize: 24),
+        style: TextStyle(fontSize: 18),
         mode: AnimatedTextMode.loop,
       ),
-      const FallingText(
+      FallingText(
         'Falling Text',
-        style: TextStyle(fontSize: 24),
+        style: TextStyle(fontSize: 18),
         mode: AnimatedTextMode.loop,
       ),
-      const BouncingText(
-        'Bouncing Text',
-        style: TextStyle(fontSize: 24),
+
+      BouncingText(
+        'Bouncing Text Bouncing Text Bouncing Text Bouncing Text Bouncing Text Bouncing Text',
+        style: TextStyle(fontSize: 18),
         mode: AnimatedTextMode.loop,
       ),
     ];
@@ -97,9 +145,10 @@ class HomeView extends StatelessWidget {
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
           child: Column(
-            children: [
-              for (var widget in demos) AnimatedTextDemo(child: widget),
-            ],
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: [...demos.map((demo) => AnimatedTextDemo(child: demo))],
           ),
         ),
       ),
@@ -114,7 +163,7 @@ class AnimatedTextDemo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 24),
+      padding: const EdgeInsets.only(bottom: 18),
       child: SizedBox(width: double.infinity, child: child),
     );
   }
