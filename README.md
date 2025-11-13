@@ -1,6 +1,10 @@
 # my_animated_text
+[![pub package](https://img.shields.io/pub/v/my_animated_text.svg)](https://pub.dev/packages/my_animated_text) &nbsp;
+[![GitHub stars](https://img.shields.io/github/stars/tz-thantzin/my_animated_text.svg?style=flat&logo=github&colorB=deeppink)](https://github.com/tz-thantzin/my_animated_text/stargazers) &nbsp;
+[![GitHub license](https://img.shields.io/github/license/tz-thantzin/my_animated_text)](https://github.com/tz-thantzin/my_animated_text/blob/main/LICENSE) &nbsp;
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-donate-yellow.svg)](https://buymeacoffee.com/devthantziq)
 
-![Animated Text Demo](display/animated_text_demo.gif)
+<img src="display/animated_text_demo.gif" alt="Animated Text Demo" width="400" />
 
 ✨ A Flutter package offering a collection of customizable animated text widgets to enhance your app's UI with engaging text animations.
 
@@ -25,7 +29,20 @@
 * **MultiAnimatedText**: Combine multiple effects for a single text widget (e.g., Falling + Colorized).
 
 ---
+### Attribute
 
+| Property       | Type                     | Default                                | Description |
+|----------------|--------------------------|----------------------------------------|-------------|
+| `text`         | `String`                 | —                                      | The text content to animate |
+| `duration`     | `Duration`               | `Duration(milliseconds: 2000)`        | Duration of the animation. Ignored if an external controller is provided |
+| `style`        | `TextStyle?`             | `null`                                 | Optional text style |
+| `mode`         | `AnimatedTextMode`       | `AnimatedTextMode.forward`            | Defines how the animation plays (forward, reverse, loop, etc.) |
+| `autoStart`    | `bool`                   | `true`                                 | Automatically start animation on widget initialization |
+| `controller`   | `AnimationController?`   | `null`                                 | Optional external AnimationController; if null, one is created internally |
+| `onStarted`    | `VoidCallback?`          | `null`                                 | Callback triggered when the animation starts |
+| `onCompleted`  | `VoidCallback?`          | `null`                                 | Callback triggered when the animation completes |
+| `onRepeated`   | `VoidCallback?`          | `null`                                 | Callback triggered when the animation repeats (loop/reverse) |
+---
 ## 📥 Installation
 
 Add the following dependency to your `pubspec.yaml`:
