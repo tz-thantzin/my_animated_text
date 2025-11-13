@@ -32,3 +32,6 @@
 - Improved animations.
 - `CirclingText` now automatically adjusts radius based on text length.
 - Optimized performance for large texts and multiple effects.
+
+## 2.0.1
+- Modify Readme.md

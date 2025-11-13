@@ -2,7 +2,7 @@
 
 This example project demonstrates all the animated text widgets from the **my\_animated\_text** Flutter package.
 
-![Animated Text Demo](../display/animated_text_demo.gif)
+<img src="../display/animated_text_demo.gif" alt="Animated Text Demo" width="400" />
 
 ---
 
