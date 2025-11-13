@@ -29,7 +29,20 @@
 * **MultiAnimatedText**: Combine multiple effects for a single text widget (e.g., Falling + Colorized).
 
 ---
+### Attribute
 
+| Property       | Type                     | Default                                | Description |
+|----------------|--------------------------|----------------------------------------|-------------|
+| `text`         | `String`                 | —                                      | The text content to animate |
+| `duration`     | `Duration`               | `Duration(milliseconds: 2000)`        | Duration of the animation. Ignored if an external controller is provided |
+| `style`        | `TextStyle?`             | `null`                                 | Optional text style |
+| `mode`         | `AnimatedTextMode`       | `AnimatedTextMode.forward`            | Defines how the animation plays (forward, reverse, loop, etc.) |
+| `autoStart`    | `bool`                   | `true`                                 | Automatically start animation on widget initialization |
+| `controller`   | `AnimationController?`   | `null`                                 | Optional external AnimationController; if null, one is created internally |
+| `onStarted`    | `VoidCallback?`          | `null`                                 | Callback triggered when the animation starts |
+| `onCompleted`  | `VoidCallback?`          | `null`                                 | Callback triggered when the animation completes |
+| `onRepeated`   | `VoidCallback?`          | `null`                                 | Callback triggered when the animation repeats (loop/reverse) |
+---
 ## 📥 Installation
 
 Add the following dependency to your `pubspec.yaml`:
