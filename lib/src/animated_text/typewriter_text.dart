@@ -39,5 +39,5 @@ class TypewriterText extends MultiAnimatedText {
     super.onCompleted,
     super.onRepeated,
     super.mode,
-  }) : super(effects: [TypewriterEffect(duration: duration)]);
+  }) : super(effects: [const TypewriterEffect()]);
 }

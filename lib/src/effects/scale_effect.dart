@@ -6,10 +6,27 @@ class ScaleEffect extends TextEffect {
   final double beginScale;
   final double endScale;
 
-  ScaleEffect({this.beginScale = 0.2, this.endScale = 1.1});
+  const ScaleEffect({
+    this.beginScale = 0.2,
+    this.endScale = 1.1,
+    super.begin,
+    super.end,
+    super.curve = Curves.easeInOut,
+  });
 
   @override
   EffectLayer get layer => EffectLayer.widget;
+
+  @override
+  ScaleEffect copyWithTiming({double? begin, double? end, Curve? curve}) {
+    return ScaleEffect(
+      beginScale: beginScale,
+      endScale: endScale,
+      begin: begin ?? this.begin,
+      end: end ?? this.end,
+      curve: curve ?? this.curve,
+    );
+  }
 
   @override
   Widget build(
@@ -19,15 +36,9 @@ class ScaleEffect extends TextEffect {
     TextStyle? style,
     Widget child,
   ) {
-    final textStyle = style ?? const TextStyle();
-
-    final animation = Tween(
-      begin: beginScale,
-      end: endScale,
-    ).animate(CurvedAnimation(parent: controller, curve: Curves.easeInOut));
-    return ScaleTransition(
-      scale: animation,
-      child: Text(text, style: textStyle),
+    final animation = Tween<double>(begin: beginScale, end: endScale).animate(
+      animationOf(controller),
     );
+    return ScaleTransition(scale: animation, child: child);
   }
 }

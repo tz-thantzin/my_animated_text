@@ -4,7 +4,7 @@
 [![GitHub license](https://img.shields.io/github/license/tz-thantzin/my_animated_text)](https://github.com/tz-thantzin/my_animated_text/blob/main/LICENSE) &nbsp;
 [![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-donate-yellow.svg)](https://buymeacoffee.com/devthantziq)
 
-<img src="display/animated_text_demo.gif" alt="Animated Text Demo" width="400" />
+<img src="display/animated_text_demo.gif" alt="Animated Text Demo" />
 
 ✨ A Flutter package offering a collection of customizable animated text widgets to enhance your app's UI with engaging text animations.
 
@@ -25,8 +25,12 @@
 * **ColorizedText**: Animates text through multiple colors.
 * **BouncingText**: Animates each character with a bouncing effect.
 * **ShadowText**: Animates text shadows.
+* **BlurText**: Brings text into focus with an animated blur.
+* **FlipText**: Adds a 3D-style flip reveal on the X or Y axis.
+* **ShakeText**: Adds a damped shake for alerts and attention states.
 * **CirclingText**: Animates text in a circular path.
 * **MultiAnimatedText**: Combine multiple effects for a single text widget (e.g., Falling + Colorized).
+* **AnimateText / String.animate()**: Chain effects with a fluent API and predictable timing windows.
 
 ---
 ### Attribute
@@ -72,6 +76,20 @@ Import the package:
 
 ```dart
 import 'package:my_animated_text/my_animated_text.dart';
+```
+
+### Fluent multi-effect composition
+
+```dart
+'Launch faster'.animate(
+  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+  duration: Duration(milliseconds: 2600),
+)
+    .blur(duration: Duration(milliseconds: 500), advanceCursor: false)
+    .flip(duration: Duration(milliseconds: 700), advanceCursor: false)
+    .shimmer(delay: Duration(milliseconds: 200), advanceCursor: false)
+    .then(delay: Duration(milliseconds: 120))
+    .shake(duration: Duration(milliseconds: 450));
 ```
 
 ### SlideText
@@ -216,9 +234,13 @@ ShadowText(
 MultiAnimatedText(
   'Falling & Colorized!',
   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-  effects: [  
-    FallingEffect(),
-    ColorizeEffect(colors: [Colors.red, Colors.yellow, Colors.blue])
+  effects: [
+    FallingEffect(begin: 0.0, end: 0.45),
+    ColorizeEffect(
+      colors: [Colors.red, Colors.yellow, Colors.blue],
+      begin: 0.2,
+      end: 1.0,
+    ),
   ],
   mode: AnimatedTextMode.loop,
 )
@@ -227,8 +249,27 @@ MultiAnimatedText(
 ```dart
 BouncingText(
   'Bounce Effect with Fade and Colorized!',
-).withEffects([FadeEffect(), ColorizeEffect()]),
-``` 
+).withEffects([
+  const FadeEffect(begin: 0.0, end: 0.35),
+  ColorizeEffect(begin: 0.0, end: 1.0),
+]);
+```
+
+### Fluent composition
+
+```dart
+'Hello Flutter'.animate(
+  style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+  duration: const Duration(seconds: 3),
+)
+.fade(duration: const Duration(milliseconds: 400))
+.scale(duration: const Duration(milliseconds: 500))
+.then(delay: const Duration(milliseconds: 150))
+.slide(direction: SlideDirection.bottomToTop)
+.shimmer(advanceCursor: false);
+```
+
+Use `advanceCursor: false` when you want effects to overlap on the same portion of the timeline. You can also convert any existing `MultiAnimatedText` into the fluent API with `.compose()`.
 
 ---
 

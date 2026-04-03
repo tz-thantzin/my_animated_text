@@ -5,10 +5,25 @@ import '../config/text_effect.dart';
 class FallingEffect extends TextEffect {
   final double fallHeight;
 
-  FallingEffect({this.fallHeight = 35.0});
+  const FallingEffect({
+    this.fallHeight = 35.0,
+    super.begin,
+    super.end,
+    super.curve = Curves.linear,
+  });
 
   @override
-  EffectLayer get layer => EffectLayer.widget;
+  EffectLayer get layer => EffectLayer.character;
+
+  @override
+  FallingEffect copyWithTiming({double? begin, double? end, Curve? curve}) {
+    return FallingEffect(
+      fallHeight: fallHeight,
+      begin: begin ?? this.begin,
+      end: end ?? this.end,
+      curve: curve ?? this.curve,
+    );
+  }
 
   @override
   Widget build(
@@ -18,64 +33,32 @@ class FallingEffect extends TextEffect {
     TextStyle? style,
     Widget child,
   ) {
-    final effectiveStyle = style ?? const TextStyle();
-    return _FallingTextAnimation(
-      controller: controller,
-      text: text,
-      style: effectiveStyle,
-      fallHeight: fallHeight,
-    );
-  }
-}
+    final animation = animationOf(controller);
+    final characters = text.characters.toList();
 
-class _FallingTextAnimation extends StatefulWidget {
-  final AnimationController controller;
-  final String text;
-  final TextStyle style;
-  final double fallHeight;
+    if (characters.isEmpty) {
+      return const SizedBox.shrink();
+    }
 
-  const _FallingTextAnimation({
-    required this.controller,
-    required this.text,
-    required this.style,
-    required this.fallHeight,
-  });
-
-  @override
-  State<_FallingTextAnimation> createState() => _FallingTextAnimationState();
-}
-
-class _FallingTextAnimationState extends State<_FallingTextAnimation> {
-  late final List<Animation<double>> _animations;
-  late final List<String> _characters;
-
-  @override
-  void initState() {
-    super.initState();
-    _characters = widget.text.characters.toList();
-    _animations = List.generate(_characters.length, (index) {
-      final start = index / _characters.length;
-      final end = (index + 1) / _characters.length;
-      return Tween<double>(begin: -widget.fallHeight, end: 0.0).animate(
-        CurvedAnimation(
-          parent: widget.controller,
-          curve: Interval(start, end, curve: Curves.bounceOut),
-        ),
-      );
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: widget.controller,
+      animation: animation,
       builder: (context, _) {
         return Wrap(
           alignment: WrapAlignment.start,
-          children: List.generate(_characters.length, (index) {
+          children: List.generate(characters.length, (index) {
+            final start = index / characters.length;
+            final end = (index + 1) / characters.length;
+            final progress = Interval(
+              start,
+              (end.clamp(0.0, 1.0) as num).toDouble(),
+              curve: Curves.bounceOut,
+            ).transform(animation.value);
+            final offsetY =
+                Tween<double>(begin: -fallHeight, end: 0.0).transform(progress);
+
             return Transform.translate(
-              offset: Offset(0, _animations[index].value),
-              child: Text(_characters[index], style: widget.style),
+              offset: Offset(0, offsetY),
+              child: Text(characters[index], style: style),
             );
           }),
         );

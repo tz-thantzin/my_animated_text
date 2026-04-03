@@ -1,3 +1,4 @@
+export 'blur_effect.dart';
 export 'bouncing_effect.dart';
 export 'circling_effect.dart';
 export 'colorized_effect.dart';
@@ -12,3 +13,5 @@ export 'slide_effect.dart';
 export 'typewriter_effect.dart';
 export 'wave_motion_effect.dart';
 export 'waving_gradient_effect.dart';
+export 'flip_effect.dart';
+export 'shake_effect.dart';

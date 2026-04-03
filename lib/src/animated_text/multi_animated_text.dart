@@ -23,21 +23,19 @@ class MultiAnimatedText extends AnimatedTextBase {
 
   @override
   Widget buildAnimation(BuildContext context, AnimationController controller) {
-    Widget current = Text(text, style: style);
+    Widget current = Text(text, style: style, softWrap: true);
 
-    // Apply CHARACTER layer effects first
-    for (final effect in effects.where(
-      (e) => e.layer == EffectLayer.character,
-    )) {
+    final orderedEffects = <TextEffect>[
+      ...effects.where((effect) => effect.layer == EffectLayer.character),
+      ...effects.where((effect) => effect.layer == EffectLayer.widget),
+    ];
+
+    for (final effect in orderedEffects) {
       current = effect.build(context, controller, text, style, current);
     }
 
-    // Apply WIDGET layer effects after
-    for (final effect in effects.where((e) => e.layer == EffectLayer.widget)) {
-      current = effect.build(context, controller, text, style, current);
-    }
-
-    // Wrap in Flexible to support multi-line text properly
-    return Flexible(child: current);
+    return RepaintBoundary(
+      child: DefaultTextStyle.merge(style: style, child: current),
+    );
   }
 }

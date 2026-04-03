@@ -3,10 +3,19 @@ import 'package:flutter/material.dart';
 import '../config/text_effect.dart';
 
 class FadeEffect extends TextEffect {
-  FadeEffect();
+  const FadeEffect({super.begin, super.end, super.curve});
 
   @override
   EffectLayer get layer => EffectLayer.widget;
+
+  @override
+  FadeEffect copyWithTiming({double? begin, double? end, Curve? curve}) {
+    return FadeEffect(
+      begin: begin ?? this.begin,
+      end: end ?? this.end,
+      curve: curve ?? this.curve,
+    );
+  }
 
   @override
   Widget build(
@@ -16,7 +25,6 @@ class FadeEffect extends TextEffect {
     TextStyle? style,
     Widget child,
   ) {
-    final fade = Tween<double>(begin: 0.0, end: 1.0).animate(controller);
-    return FadeTransition(opacity: fade, child: child);
+    return FadeTransition(opacity: animationOf(controller), child: child);
   }
 }

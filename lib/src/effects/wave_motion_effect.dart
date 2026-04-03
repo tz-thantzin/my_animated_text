@@ -5,10 +5,23 @@ import 'package:flutter/material.dart';
 import '../config/text_effect.dart';
 
 class WaveMotionEffect extends TextEffect {
-  WaveMotionEffect();
+  const WaveMotionEffect({
+    super.begin,
+    super.end,
+    super.curve,
+  });
 
   @override
-  EffectLayer get layer => EffectLayer.widget;
+  EffectLayer get layer => EffectLayer.character;
+
+  @override
+  WaveMotionEffect copyWithTiming({double? begin, double? end, Curve? curve}) {
+    return WaveMotionEffect(
+      begin: begin ?? this.begin,
+      end: end ?? this.end,
+      curve: curve ?? this.curve,
+    );
+  }
 
   @override
   Widget build(
@@ -18,52 +31,22 @@ class WaveMotionEffect extends TextEffect {
     TextStyle? style,
     Widget child,
   ) {
-    if (child is! Text) return child;
-
-    final textStyle = style ?? const TextStyle();
-
-    return _WaveMotionTextAnimation(
-      controller: controller,
-      text: text,
-      style: textStyle,
-    );
-  }
-}
-
-class _WaveMotionTextAnimation extends StatefulWidget {
-  final AnimationController controller;
-  final String text;
-  final TextStyle? style;
-
-  const _WaveMotionTextAnimation({
-    required this.controller,
-    required this.text,
-    this.style,
-  });
-
-  @override
-  State<_WaveMotionTextAnimation> createState() =>
-      _WaveMotionTextAnimationState();
-}
-
-class _WaveMotionTextAnimationState extends State<_WaveMotionTextAnimation> {
-  @override
-  Widget build(BuildContext context) {
-    final characters = widget.text.characters.toList();
+    final animation = animationOf(controller);
+    final characters = text.characters.toList();
 
     return AnimatedBuilder(
-      animation: widget.controller,
-      builder: (context, child) {
-        final double wave = widget.controller.value * 2 * math.pi;
+      animation: animation,
+      builder: (context, _) {
+        final wave = animation.value * 2 * math.pi;
 
-        return Row(
-          mainAxisSize: MainAxisSize.min,
+        return Wrap(
+          spacing: 0,
+          runSpacing: 0,
           children: List.generate(characters.length, (index) {
-            // Each character has a phase offset based on its index
-            final double offsetY = 5 * math.sin(wave + index);
+            final offsetY = 5 * math.sin(wave + index);
             return Transform.translate(
               offset: Offset(0, -offsetY),
-              child: Text(characters[index], style: widget.style),
+              child: Text(characters[index], style: style),
             );
           }),
         );

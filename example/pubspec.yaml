@@ -1,6 +1,7 @@
 name: example
 description: "A Flutter example project demonstrating all the animated text widgets from my_animated_text, showcasing SlideText, TypewriterText, WaveMotionText, WavingGradientText, ShimmerText, FadeText, ScaleText, RotationText, MarqueeText, FallingText, and ColorizedText with different styles and animation modes."
 version: 0.0.1+1
+publish_to: none
 
 environment:
   sdk: ^3.9.2

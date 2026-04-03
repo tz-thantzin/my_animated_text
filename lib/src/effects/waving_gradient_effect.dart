@@ -1,19 +1,33 @@
 import 'package:flutter/material.dart';
 
-import '../../my_animated_text.dart';
+import '../animated_text/waving_gradient_text.dart';
 import '../config/text_effect.dart';
 
 class WaveGradientEffect extends TextEffect {
   final List<Color> colors;
   final WavingDirection direction;
 
-  @override
-  EffectLayer get layer => EffectLayer.widget; // Important!
-
-  WaveGradientEffect({
+  const WaveGradientEffect({
     this.direction = WavingDirection.leftToRight,
     this.colors = defaultWavingColors,
+    super.begin,
+    super.end,
+    super.curve,
   });
+
+  @override
+  EffectLayer get layer => EffectLayer.widget;
+
+  @override
+  WaveGradientEffect copyWithTiming({double? begin, double? end, Curve? curve}) {
+    return WaveGradientEffect(
+      direction: direction,
+      colors: colors,
+      begin: begin ?? this.begin,
+      end: end ?? this.end,
+      curve: curve ?? this.curve,
+    );
+  }
 
   @override
   Widget build(
@@ -23,9 +37,12 @@ class WaveGradientEffect extends TextEffect {
     TextStyle? style,
     Widget child,
   ) {
+    final animation = animationOf(controller);
+
     return AnimatedBuilder(
-      animation: controller,
-      builder: (context, _) {
+      animation: animation,
+      child: child,
+      builder: (context, childWidget) {
         return ShaderMask(
           shaderCallback: (bounds) {
             return LinearGradient(
@@ -35,20 +52,19 @@ class WaveGradientEffect extends TextEffect {
               tileMode: TileMode.mirror,
               transform: GradientTranslation(
                 direction == WavingDirection.leftToRight
-                    ? controller.value * bounds.width
-                    : -controller.value * bounds.width,
+                    ? animation.value * bounds.width
+                    : -animation.value * bounds.width,
               ),
             ).createShader(bounds);
           },
           blendMode: BlendMode.srcIn,
-          child: child, // Wrap whatever widget is rendered by previous effects
+          child: childWidget ?? const SizedBox.shrink(),
         );
       },
     );
   }
 }
 
-/// GradientTransform to animate gradient horizontally
 class GradientTranslation extends GradientTransform {
   final double translateX;
   const GradientTranslation(this.translateX);
