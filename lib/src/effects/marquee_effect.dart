@@ -1,15 +1,34 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
-import '../../animated_text_base.dart';
 import '../config/text_effect.dart';
 
 class MarqueeEffect extends TextEffect {
-  final double speed; // pixels per second
-  final AnimatedTextMode mode;
-  MarqueeEffect({this.speed = 50.0, this.mode = AnimatedTextMode.loop});
+  final double speed;
+  final double spacing;
+
+  const MarqueeEffect({
+    this.speed = 50.0,
+    this.spacing = 50.0,
+    super.begin,
+    super.end,
+    super.curve = Curves.linear,
+  });
 
   @override
   EffectLayer get layer => EffectLayer.widget;
+
+  @override
+  MarqueeEffect copyWithTiming({double? begin, double? end, Curve? curve}) {
+    return MarqueeEffect(
+      speed: speed,
+      spacing: spacing,
+      begin: begin ?? this.begin,
+      end: end ?? this.end,
+      curve: curve ?? this.curve,
+    );
+  }
 
   @override
   Widget build(
@@ -19,107 +38,80 @@ class MarqueeEffect extends TextEffect {
     TextStyle? style,
     Widget child,
   ) {
-    final textStyle = style ?? const TextStyle();
-    return _MarqueeTextAnimation(
-      text: text,
-      style: textStyle,
-      speed: speed,
-      controller: controller,
-      mode: mode,
-    );
-  }
-}
+    final animation = animationOf(controller);
 
-/// Internal widget that manages the marquee scroll effect for [MarqueeText].
-class _MarqueeTextAnimation extends StatefulWidget {
-  final String text;
-  final TextStyle? style;
-  final double speed;
-  final AnimationController controller;
-  final AnimatedTextMode mode;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final textPainter = TextPainter(
+          text: TextSpan(text: text, style: style),
+          maxLines: 1,
+          textDirection: Directionality.of(context),
+        )..layout();
 
-  const _MarqueeTextAnimation({
-    required this.text,
-    this.style,
-    required this.speed,
-    required this.controller,
-    required this.mode,
-  });
+        final textWidth = textPainter.width;
+        final viewportWidth = constraints.maxWidth.isFinite
+            ? constraints.maxWidth
+            : textWidth;
+        final totalTravel = textWidth + spacing;
+        final safeSpeed = speed <= 0 ? 1.0 : speed;
+        final controllerDurationMs = math.max(
+          1,
+          (controller.duration ?? const Duration(seconds: 1)).inMilliseconds,
+        );
+        final cycleDurationMs = math.max(
+          1.0,
+          ((textWidth + spacing) / safeSpeed) * 1000,
+        );
 
-  @override
-  State<_MarqueeTextAnimation> createState() => _MarqueeTextAnimationState();
-}
+        return ClipRect(
+          child: SizedBox(
+            width: viewportWidth,
+            height: (style?.fontSize ?? 14.0) * 1.4,
+            child: AnimatedBuilder(
+              animation: animation,
+              builder: (context, _) {
+                final cycles = controllerDurationMs / cycleDurationMs;
+                final progress = (animation.value * cycles) % 1.0;
+                final offset = -totalTravel * progress;
+                final children = <Widget>[
+                  Positioned(
+                    left: offset,
+                    top: 0,
+                    bottom: 0,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(text, style: style, maxLines: 1),
+                    ),
+                  ),
+                ];
 
-class _MarqueeTextAnimationState extends State<_MarqueeTextAnimation> {
-  final GlobalKey _textKey = GlobalKey();
-  final ScrollController _scrollController = ScrollController();
-  double _textWidth = 0;
+                children.addAll([
+                  Positioned(
+                    left: offset + totalTravel,
+                    top: 0,
+                    bottom: 0,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(text, style: style, maxLines: 1),
+                    ),
+                  ),
+                  Positioned(
+                    left: offset + (totalTravel * 2),
+                    top: 0,
+                    bottom: 0,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(text, style: style, maxLines: 1),
+                    ),
+                  ),
+                ]);
 
-  @override
-  void initState() {
-    super.initState();
-
-    // Wait until layout is complete to measure text width
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-
-      _textWidth = _textKey.currentContext?.size?.width ?? 0;
-      final totalScrollWidth = _textWidth + 50;
-      final durationSeconds = totalScrollWidth / widget.speed;
-
-      // Ensure positive duration before assigning
-      if (durationSeconds > 0) {
-        widget.controller.duration = Duration(seconds: durationSeconds.toInt());
-
-        if (widget.controller.status == AnimationStatus.dismissed) {
-          widget.controller.forward();
-        }
-      }
-
-      // Link the controller's value to the scroll offset
-      widget.controller.addListener(() {
-        if (_scrollController.hasClients) {
-          _scrollController.jumpTo(
-            (widget.controller.value * totalScrollWidth),
-          );
-        }
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final bool isLooping = widget.mode == AnimatedTextMode.loop;
-
-    return SizedBox(
-      height: 40,
-      width: double.infinity,
-      child: ListView(
-        controller: _scrollController,
-        scrollDirection: Axis.horizontal,
-        physics: const NeverScrollableScrollPhysics(),
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(widget.text, key: _textKey, style: widget.style),
-              // Add duplicates for looping marquee effect
-              if (isLooping) ...[
-                const SizedBox(width: 50),
-                Text(widget.text, style: widget.style),
-                const SizedBox(width: 50),
-                Text(widget.text, style: widget.style),
-              ],
-            ],
+                return Stack(children: children);
+              },
+            ),
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

@@ -11,16 +11,33 @@ class ShadowEffect extends TextEffect {
   final double offsetEnd;
   final Color? color;
 
-  ShadowEffect({
+  const ShadowEffect({
     this.blurBegin = 2.0,
     this.blurEnd = 18.0,
     this.offsetBegin = 0.0,
     this.offsetEnd = 8.0,
     this.color,
+    super.begin,
+    super.end,
+    super.curve = Curves.easeInOut,
   });
 
   @override
   EffectLayer get layer => EffectLayer.widget;
+
+  @override
+  ShadowEffect copyWithTiming({double? begin, double? end, Curve? curve}) {
+    return ShadowEffect(
+      blurBegin: blurBegin,
+      blurEnd: blurEnd,
+      offsetBegin: offsetBegin,
+      offsetEnd: offsetEnd,
+      color: color,
+      begin: begin ?? this.begin,
+      end: end ?? this.end,
+      curve: curve ?? this.curve,
+    );
+  }
 
   @override
   Widget build(
@@ -30,81 +47,33 @@ class ShadowEffect extends TextEffect {
     TextStyle? style,
     Widget child,
   ) {
-    return _ShadowWrapper(
-      controller: controller,
-      child: child,
-      blurBegin: blurBegin,
-      blurEnd: blurEnd,
-      offsetBegin: offsetBegin,
-      offsetEnd: offsetEnd,
-      color: color ?? style?.color?.withValues(alpha: 0.5) ?? Colors.black54,
-    );
-  }
-}
+    final animation = animationOf(controller);
+    final shadowColor =
+        color ?? style?.color?.withValues(alpha: 0.5) ?? Colors.black54;
 
-class _ShadowWrapper extends StatefulWidget {
-  final Widget child;
-  final AnimationController controller;
-  final double blurBegin;
-  final double blurEnd;
-  final double offsetBegin;
-  final double offsetEnd;
-  final Color color;
-
-  const _ShadowWrapper({
-    required this.child,
-    required this.controller,
-    required this.blurBegin,
-    required this.blurEnd,
-    required this.offsetBegin,
-    required this.offsetEnd,
-    required this.color,
-  });
-
-  @override
-  State<_ShadowWrapper> createState() => _ShadowWrapperState();
-}
-
-class _ShadowWrapperState extends State<_ShadowWrapper> {
-  late Animation<double> _blurAnim;
-  late Animation<double> _offsetAnim;
-
-  @override
-  void initState() {
-    super.initState();
-    _blurAnim = Tween<double>(begin: widget.blurBegin, end: widget.blurEnd)
-        .animate(
-          CurvedAnimation(parent: widget.controller, curve: Curves.easeInOut),
-        );
-    _offsetAnim =
-        Tween<double>(begin: widget.offsetBegin, end: widget.offsetEnd).animate(
-          CurvedAnimation(parent: widget.controller, curve: Curves.easeInOut),
-        );
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: widget.controller,
-      builder: (context, _) {
+      animation: animation,
+      child: child,
+      builder: (context, childWidget) {
+        final blur = Tween<double>(begin: blurBegin, end: blurEnd)
+            .transform(animation.value);
+        final offset = Tween<double>(begin: offsetBegin, end: offsetEnd)
+            .transform(animation.value);
+
         return Stack(
           clipBehavior: Clip.none,
           children: [
             Transform.translate(
-              offset: Offset(0, _offsetAnim.value),
+              offset: Offset(0, offset),
               child: ImageFiltered(
-                imageFilter: ui.ImageFilter.blur(
-                  sigmaX: _blurAnim.value,
-                  sigmaY: _blurAnim.value,
-                ),
+                imageFilter: ui.ImageFilter.blur(sigmaX: blur, sigmaY: blur),
                 child: ColorFiltered(
-                  colorFilter: ColorFilter.mode(widget.color, BlendMode.srcIn),
-                  child: widget.child,
+                  colorFilter: ColorFilter.mode(shadowColor, BlendMode.srcIn),
+                  child: childWidget ?? const SizedBox.shrink(),
                 ),
               ),
             ),
-            // Original widget on top
-            widget.child,
+            childWidget ?? const SizedBox.shrink(),
           ],
         );
       },

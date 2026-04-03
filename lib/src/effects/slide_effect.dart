@@ -1,15 +1,39 @@
 import 'package:flutter/material.dart';
 
-import '../../my_animated_text.dart';
+import '../animated_text/slide_text.dart';
 import '../config/text_effect.dart';
 
 class SlideEffect extends TextEffect {
   final SlideDirection direction;
 
-  SlideEffect({this.direction = SlideDirection.leftToRight});
+  const SlideEffect({
+    this.direction = SlideDirection.leftToRight,
+    super.begin,
+    super.end,
+    super.curve = Curves.easeOut,
+  });
 
   @override
   EffectLayer get layer => EffectLayer.widget;
+
+  @override
+  SlideEffect copyWithTiming({double? begin, double? end, Curve? curve}) {
+    return SlideEffect(
+      direction: direction,
+      begin: begin ?? this.begin,
+      end: end ?? this.end,
+      curve: curve ?? this.curve,
+    );
+  }
+
+  Offset get _beginOffset {
+    return switch (direction) {
+      SlideDirection.leftToRight => const Offset(-1.0, 0.0),
+      SlideDirection.rightToLeft => const Offset(1.0, 0.0),
+      SlideDirection.topToBottom => const Offset(0.0, -1.0),
+      SlideDirection.bottomToTop => const Offset(0.0, 1.0),
+    };
+  }
 
   @override
   Widget build(
@@ -19,69 +43,14 @@ class SlideEffect extends TextEffect {
     TextStyle? style,
     Widget child,
   ) {
-    if (child is! Text) return child;
-
-    final textStyle = style ?? const TextStyle();
-
-    return _SlideTextAnimation(
-      controller: controller,
-      text: text,
-      style: textStyle,
-      direction: direction,
-    );
-  }
-}
-
-class _SlideTextAnimation extends StatefulWidget {
-  final AnimationController controller;
-  final String text;
-  final SlideDirection direction;
-  final TextStyle? style;
-
-  const _SlideTextAnimation({
-    required this.controller,
-    required this.text,
-    required this.direction,
-    this.style,
-  });
-
-  @override
-  State<_SlideTextAnimation> createState() => _SlideTextAnimationState();
-}
-
-class _SlideTextAnimationState extends State<_SlideTextAnimation> {
-  late final Animation<Offset> _slideAnimation;
-  late final Animation<double> _fadeAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-
-    final beginOffset = switch (widget.direction) {
-      SlideDirection.leftToRight => const Offset(-1.0, 0.0),
-      SlideDirection.rightToLeft => const Offset(1.0, 0.0),
-      SlideDirection.topToBottom => const Offset(0.0, -1.0),
-      SlideDirection.bottomToTop => const Offset(0.0, 1.0),
-    };
-
-    _slideAnimation = Tween<Offset>(begin: beginOffset, end: Offset.zero)
-        .animate(
-          CurvedAnimation(parent: widget.controller, curve: Curves.easeOut),
-        );
-
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(parent: widget.controller, curve: Curves.easeIn));
-  }
-
-  @override
-  Widget build(BuildContext context) {
+    final animation = animationOf(controller);
     return FadeTransition(
-      opacity: _fadeAnimation,
+      opacity: animation,
       child: SlideTransition(
-        position: _slideAnimation,
-        child: Text(widget.text, style: widget.style),
+        position: Tween<Offset>(begin: _beginOffset, end: Offset.zero).animate(
+          animation,
+        ),
+        child: child,
       ),
     );
   }

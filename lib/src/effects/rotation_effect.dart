@@ -1,19 +1,53 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
-import '../../my_animated_text.dart';
+import '../animated_text/rotation_text.dart';
 import '../config/text_effect.dart';
 
 class RotationEffect extends TextEffect {
   final RotationDirection rotationDirection;
   final double? rotationDegrees;
 
+  const RotationEffect({
+    this.rotationDirection = RotationDirection.swing,
+    this.rotationDegrees,
+    super.begin,
+    super.end,
+    super.curve = Curves.easeInOut,
+  });
+
   @override
   EffectLayer get layer => EffectLayer.widget;
 
-  RotationEffect({
-    this.rotationDirection = RotationDirection.swing,
-    this.rotationDegrees,
-  });
+  @override
+  RotationEffect copyWithTiming({double? begin, double? end, Curve? curve}) {
+    return RotationEffect(
+      rotationDirection: rotationDirection,
+      rotationDegrees: rotationDegrees,
+      begin: begin ?? this.begin,
+      end: end ?? this.end,
+      curve: curve ?? this.curve,
+    );
+  }
+
+  double get _endAngle {
+    switch (rotationDirection) {
+      case RotationDirection.clockwise:
+        return math.pi * 2;
+      case RotationDirection.anticlockwise:
+        return -math.pi * 2;
+      case RotationDirection.custom:
+        final degrees = ((rotationDegrees ?? 180).clamp(0.0, 360.0) as num).toDouble();
+        return degrees * (math.pi / 180);
+      case RotationDirection.swing:
+        return 0.2;
+    }
+  }
+
+  double get _startAngle {
+    return rotationDirection == RotationDirection.swing ? -0.2 : 0.0;
+  }
 
   @override
   Widget build(
@@ -23,75 +57,18 @@ class RotationEffect extends TextEffect {
     TextStyle? style,
     Widget child,
   ) {
-    return _RotationEffectWidget(
-      controller: controller,
-      child: child,
-      rotationDegrees: rotationDegrees,
-      rotationDirection: rotationDirection,
+    final animation = Tween<double>(begin: _startAngle, end: _endAngle).animate(
+      animationOf(controller),
     );
-  }
-}
 
-class _RotationEffectWidget extends StatefulWidget {
-  final AnimationController controller;
-  final RotationDirection rotationDirection;
-  final double? rotationDegrees;
-  final Widget child;
-
-  const _RotationEffectWidget({
-    required this.controller,
-    required this.child,
-    required this.rotationDirection,
-    required this.rotationDegrees,
-  });
-
-  @override
-  State<_RotationEffectWidget> createState() => _RotationEffectWidgetState();
-}
-
-class _RotationEffectWidgetState extends State<_RotationEffectWidget> {
-  late final Animation<double> _rotation;
-
-  @override
-  void initState() {
-    super.initState();
-
-    double start, end;
-    switch (widget.rotationDirection) {
-      case RotationDirection.clockwise:
-        start = 0;
-        end = 3.14159 * 2;
-        break;
-      case RotationDirection.anticlockwise:
-        start = 0;
-        end = -3.14159 * 2;
-        break;
-      case RotationDirection.custom:
-        start = 0;
-        final degrees = widget.rotationDegrees ?? 180;
-        end = (degrees.clamp(0, 360)) * (3.14159 / 180);
-        break;
-      case RotationDirection.swing:
-        start = -0.2;
-        end = 0.2;
-        break;
-    }
-
-    _rotation = Tween(begin: start, end: end).animate(
-      CurvedAnimation(parent: widget.controller, curve: Curves.easeInOut),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: _rotation,
-      child: widget.child,
-      builder: (context, child) {
+      animation: animation,
+      child: child,
+      builder: (context, childWidget) {
         return Transform.rotate(
-          angle: _rotation.value,
+          angle: animation.value,
           alignment: Alignment.center,
-          child: Center(child: child),
+          child: childWidget ?? const SizedBox.shrink(),
         );
       },
     );

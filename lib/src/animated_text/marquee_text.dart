@@ -47,6 +47,6 @@ class MarqueeText extends MultiAnimatedText {
     double speed = 50.0,
     double spacing = 50.0,
   }) : super(
-         effects: [MarqueeEffect(speed: speed, mode: mode)],
+         effects: [MarqueeEffect(speed: speed, spacing: spacing)],
        );
 }

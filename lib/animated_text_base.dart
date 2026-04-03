@@ -9,21 +9,6 @@ enum AnimatedTextMode { forward, reverse, loop, reverseLoop }
 /// starting, completing, and repeating animations.
 ///
 /// Subclasses must implement [buildAnimation] to define the widget's animation.
-///
-/// Example:
-/// ```dart
-/// class MyAnimatedText extends AnimatedTextBase {
-///   const MyAnimatedText(String text, {super.key}) : super(text);
-///
-///   @override
-///   Widget buildAnimation(BuildContext context, AnimationController controller) {
-///     return FadeTransition(
-///       opacity: controller,
-///       child: Text(text),
-///     );
-///   }
-/// }
-/// ```
 abstract class AnimatedTextBase extends StatefulWidget {
   /// The text to animate.
   final String text;
@@ -74,24 +59,35 @@ abstract class AnimatedTextBase extends StatefulWidget {
 
 class _AnimatedTextBaseState extends State<AnimatedTextBase>
     with SingleTickerProviderStateMixin {
-  late final AnimationController controller;
+  AnimationController? _internalController;
+  late AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
+    _controller = _resolveController(widget.controller);
+    _controller.addStatusListener(_handleStatus);
 
-    // Use provided controller or create a new one.
-    controller =
-        widget.controller ??
-        AnimationController(vsync: this, duration: widget.duration);
-
-    // Listen to animation status to trigger callbacks.
-    controller.addStatusListener(_handleStatus);
-
-    // Start animation automatically if requested.
     if (widget.autoStart) {
-      _startAnimation();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _startAnimation(reset: true);
+        }
+      });
     }
+  }
+
+  AnimationController _resolveController(AnimationController? external) {
+    if (external != null) {
+      return external;
+    }
+
+    final controller = AnimationController(
+      vsync: this,
+      duration: widget.duration,
+    );
+    _internalController = controller;
+    return controller;
   }
 
   void _handleStatus(AnimationStatus status) {
@@ -101,9 +97,8 @@ class _AnimatedTextBaseState extends State<AnimatedTextBase>
         break;
       case AnimationStatus.completed:
         widget.onCompleted?.call();
-        if (widget.mode == AnimatedTextMode.loop) {
-          widget.onRepeated?.call();
-        } else if (widget.mode == AnimatedTextMode.reverseLoop) {
+        if (widget.mode == AnimatedTextMode.loop ||
+            widget.mode == AnimatedTextMode.reverseLoop) {
           widget.onRepeated?.call();
         }
         break;
@@ -113,39 +108,73 @@ class _AnimatedTextBaseState extends State<AnimatedTextBase>
         }
         break;
       case AnimationStatus.dismissed:
-        // Nothing to do: repeat(reverse:true) handles it
         break;
     }
   }
 
-  void _startAnimation() {
+  void _startAnimation({bool reset = false}) {
     switch (widget.mode) {
       case AnimatedTextMode.forward:
-        controller.forward();
+        _controller.forward(from: reset ? 0.0 : _controller.value);
         break;
       case AnimatedTextMode.reverse:
-        controller.reverse(from: 1.0);
+        _controller.reverse(from: reset ? 1.0 : _controller.value);
         break;
       case AnimatedTextMode.loop:
-        controller.repeat();
+        _controller.repeat();
         break;
       case AnimatedTextMode.reverseLoop:
-        controller.repeat(reverse: true); // automatic back-and-forth
+        _controller.repeat(reverse: true);
         break;
     }
   }
 
   @override
+  void didUpdateWidget(covariant AnimatedTextBase oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.controller != widget.controller) {
+      _controller.removeStatusListener(_handleStatus);
+
+      if (oldWidget.controller == null) {
+        _internalController?.dispose();
+        _internalController = null;
+      }
+
+      _controller = _resolveController(widget.controller);
+      _controller.addStatusListener(_handleStatus);
+
+      if (widget.autoStart) {
+        _startAnimation(reset: true);
+      }
+      return;
+    }
+
+    if (widget.controller == null && oldWidget.duration != widget.duration) {
+      _controller.duration = widget.duration;
+    }
+
+    if (oldWidget.autoStart != widget.autoStart && widget.autoStart) {
+      _startAnimation(reset: true);
+      return;
+    }
+
+    if (oldWidget.mode != widget.mode && widget.autoStart) {
+      _startAnimation(reset: true);
+    }
+  }
+
+  @override
   void dispose() {
-    // Dispose only if we created the controller internally
+    _controller.removeStatusListener(_handleStatus);
     if (widget.controller == null) {
-      controller.dispose();
+      _internalController?.dispose();
     }
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return widget.buildAnimation(context, controller);
+    return widget.buildAnimation(context, _controller);
   }
 }
