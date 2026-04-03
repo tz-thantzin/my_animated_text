@@ -4,7 +4,7 @@
 [![GitHub license](https://img.shields.io/github/license/tz-thantzin/my_animated_text)](https://github.com/tz-thantzin/my_animated_text/blob/main/LICENSE) &nbsp;
 [![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-donate-yellow.svg)](https://buymeacoffee.com/devthantziq)
 
-<img src="display/animated_text_demo.gif" alt="Animated Text Demo" width="400" />
+<img src="display/animated_text_demo.gif" alt="Animated Text Demo" />
 
 ✨ A Flutter package offering a collection of customizable animated text widgets to enhance your app's UI with engaging text animations.
 
