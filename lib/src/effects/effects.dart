@@ -6,6 +6,7 @@ export 'fade_effect.dart';
 export 'falling_effect.dart';
 export 'marquee_effect.dart';
 export 'rotation_effect.dart';
+export 'scramble_effect.dart';
 export 'scale_effect.dart';
 export 'shadow_effect.dart';
 export 'shimmer_effect.dart';
