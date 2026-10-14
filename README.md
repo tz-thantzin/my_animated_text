@@ -14,6 +14,29 @@ is also available.
 
 ---
 
+## 📸 Capture screenshots, GIFs, and video in widget tests
+
+The animation previews in this README are GIF files. You can also capture
+Flutter screens and create GIF or MP4 demos from widget tests with
+[`widget_test_capture`](https://pub.dev/packages/widget_test_capture).
+
+<p align="center">
+  <img src="display/widget_test_capture/capture-demo-screen.png" alt="Flutter screen captured in a widget test" width="600" />
+</p>
+
+<p align="center">
+  <img src="display/widget_test_capture/panel-animation-demo.gif" alt="Panel animation captured as a GIF" width="480" />
+</p>
+
+Click the animation to open its MP4 video:
+
+[![Open the MP4 panel animation](display/widget_test_capture/panel-animation-demo.gif)](display/widget_test_capture/panel-animation-demo.mp4)
+
+The [capture example test](https://github.com/tz-thantzin/widget_test_capture/blob/main/example/test/capture_example_test.dart)
+shows how to generate these outputs.
+
+---
+
 ## 📦 Features
 
 * **SlideText**: Slides text in from left to right or right to left.
