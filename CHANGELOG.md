@@ -1,3 +1,10 @@
+## 3.0.0
+
+- Added recorded GIF previews for every named text animation, both composition APIs, and `AnimatedTextCarousel` to the package README.
+- Added `ScrambleText`, `ScrambleEffect`, and fluent `.scramble()` with Unicode-aware grapheme handling, seeded reveal order, adjustable symbol speed, and a recorded example GIF.
+- Added `AnimatedTextCarousel`, a phrase rotator with animated transitions, timed playback, hover pause, and manual controls. Manual changes restart the playback interval, and phrase updates animate consistently.
+- Improved package documentation and raised the package to its 3.x major release while retaining the existing effect and composition APIs.
+
 ## 2.2.0
 
 - Added three new composable effects: `BlurEffect`, `FlipEffect`, and `ShakeEffect`.

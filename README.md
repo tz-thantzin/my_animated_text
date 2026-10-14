@@ -4,7 +4,11 @@
 [![GitHub license](https://img.shields.io/github/license/tz-thantzin/my_animated_text)](https://github.com/tz-thantzin/my_animated_text/blob/main/LICENSE) &nbsp;
 [![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-donate-yellow.svg)](https://buymeacoffee.com/devthantziq)
 
-<img src="display/animated_text_demo.gif" alt="Animated Text Demo" />
+<img src="display/previews/multi.gif" alt="Several text effects composed into one animation" width="800" />
+
+The preview above combines effects. The gallery below shows each animation
+separately. The [original full showcase GIF](display/animated_text_demo.gif)
+is also available.
 
 ✨ A Flutter package offering a collection of customizable animated text widgets to enhance your app's UI with engaging text animations.
 
@@ -28,9 +32,30 @@
 * **BlurText**: Brings text into focus with an animated blur.
 * **FlipText**: Adds a 3D-style flip reveal on the X or Y axis.
 * **ShakeText**: Adds a damped shake for alerts and attention states.
+* **ScrambleText / .scramble()**: Decodes text through changing symbols with a configurable reveal order.
 * **CirclingText**: Animates text in a circular path.
 * **MultiAnimatedText**: Combine multiple effects for a single text widget (e.g., Falling + Colorized).
 * **AnimateText / String.animate()**: Chain effects with a fluent API and predictable timing windows.
+* **AnimatedTextCarousel**: Rotate between phrases with a timed, animated transition or manual controls.
+
+---
+### Effect previews
+
+These GIFs were recorded from the Flutter [effect preview app](example/lib/effect_preview.dart). Each effect preview also represents its matching fluent method, such as `SlideText` and `.slide()`.
+
+| Effect | Effect |
+| --- | --- |
+| **SlideText**<br><img src="display/previews/slide.gif" alt="SlideText sliding into view" width="360" /> | **TypewriterText**<br><img src="display/previews/typewriter.gif" alt="TypewriterText revealing letters" width="360" /> |
+| **WaveMotionText**<br><img src="display/previews/wave_motion.gif" alt="WaveMotionText moving letters in a wave" width="360" /> | **WavingGradientText**<br><img src="display/previews/waving_gradient.gif" alt="WavingGradientText moving a gradient across text" width="360" /> |
+| **ShimmerText**<br><img src="display/previews/shimmer.gif" alt="ShimmerText sweeping a highlight across text" width="360" /> | **FadeText**<br><img src="display/previews/fade.gif" alt="FadeText changing opacity" width="360" /> |
+| **ScaleText**<br><img src="display/previews/scale.gif" alt="ScaleText growing in size" width="360" /> | **RotationText**<br><img src="display/previews/rotation.gif" alt="RotationText turning text" width="360" /> |
+| **MarqueeText**<br><img src="display/previews/marquee.gif" alt="MarqueeText scrolling horizontally" width="360" /> | **FallingText**<br><img src="display/previews/falling.gif" alt="FallingText dropping letters into place" width="360" /> |
+| **ColorizedText**<br><img src="display/previews/colorized.gif" alt="ColorizedText cycling through colors" width="360" /> | **BouncingText**<br><img src="display/previews/bouncing.gif" alt="BouncingText bouncing letters" width="360" /> |
+| **ShadowText**<br><img src="display/previews/shadow.gif" alt="ShadowText animating a glow" width="360" /> | **BlurText**<br><img src="display/previews/blur.gif" alt="BlurText coming into focus" width="360" /> |
+| **FlipText**<br><img src="display/previews/flip.gif" alt="FlipText flipping into view" width="360" /> | **ShakeText**<br><img src="display/previews/shake.gif" alt="ShakeText shaking horizontally" width="360" /> |
+| **ScrambleText**<br><img src="display/previews/scramble.gif" alt="ScrambleText resolving changing symbols" width="360" /> | **CirclingText**<br><img src="display/previews/circling.gif" alt="CirclingText rotating letters in a circle" width="360" /> |
+| **MultiAnimatedText**<br><img src="display/previews/multi.gif" alt="MultiAnimatedText combining several effects" width="360" /> | **AnimateText / String.animate()**<br><img src="display/previews/fluent.gif" alt="Fluent animation composing several effects" width="360" /> |
+| **AnimatedTextCarousel**<br><img src="display/previews/carousel.gif" alt="AnimatedTextCarousel changing phrases" width="360" /> | |
 
 ---
 ### Attribute
@@ -53,7 +78,7 @@ Add the following dependency to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  my_animated_text: ^{version}
+  my_animated_text: ^3.0.0
 ```
 
 or run below in your terminal
@@ -77,6 +102,87 @@ Import the package:
 ```dart
 import 'package:my_animated_text/my_animated_text.dart';
 ```
+
+### AnimatedTextCarousel
+
+Cycle through short messages automatically, pause while the pointer is over the
+text, or advance manually. Keep the key in your widget's state so it stays
+attached across rebuilds:
+
+```dart
+class PhraseCarousel extends StatefulWidget {
+  const PhraseCarousel({super.key});
+
+  @override
+  State<PhraseCarousel> createState() => _PhraseCarouselState();
+}
+
+class _PhraseCarouselState extends State<PhraseCarousel> {
+  final carouselKey = GlobalKey<AnimatedTextCarouselState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        AnimatedTextCarousel(
+          key: carouselKey,
+          phrases: const [
+            'Build with care',
+            'Ship with confidence',
+            'Keep exploring',
+          ],
+          interval: const Duration(seconds: 2),
+          pauseOnHover: true,
+          onChanged: (index) => debugPrint('Showing phrase $index'),
+        ),
+        IconButton(
+          tooltip: 'Next phrase',
+          onPressed: () => carouselKey.currentState?.next(),
+          icon: const Icon(Icons.arrow_forward),
+        ),
+      ],
+    );
+  }
+}
+```
+
+`previous()` moves back and `show(index)` selects a phrase, wrapping the index
+into range. Manual navigation starts a fresh interval before the next automatic
+change. The example app shows both controls alongside the existing effect demos.
+
+### Scramble reveal
+
+<img src="display/scramble_reveal.gif" alt="Scramble text resolving into a headline" width="900" />
+
+Use `ScrambleText` for a complete reveal, or `.scramble()` to add it to a fluent
+timeline. The effect keeps whitespace in place and resolves Unicode grapheme
+clusters together. `seed` makes the random order and replacement symbols
+repeatable.
+
+```dart
+ScrambleText(
+  'MAKE EVERY WORD COUNT',
+  reveal: ScrambleReveal.random,
+  seed: 17,
+  cyclesPerSecond: 24,
+  duration: const Duration(milliseconds: 2800),
+  mode: AnimatedTextMode.loop,
+  style: const TextStyle(fontFamily: 'monospace', fontSize: 24),
+)
+```
+
+```dart
+'Launch with clarity'
+    .animate(duration: const Duration(seconds: 4))
+    .scramble(
+      reveal: ScrambleReveal.leftToRight,
+      duration: const Duration(seconds: 2),
+    );
+```
+
+In the fluent example, the resolved text stays visible for the remaining two
+seconds of each loop. The focused preview used for the GIF is in
+`example/lib/scramble_demo.dart`.
 
 ### Fluent multi-effect composition
 
@@ -170,14 +276,16 @@ RotationText(
 )
 ```
 
+### CirclingText
+
 ```dart
 CirclingText(
-    'Circling Text Circling Text ',
-    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-    mode: AnimatedTextMode.loop,
-    direction: CirclingDirection.clockwise,
-    radius: 45,
-),
+  'Circling Text Circling Text ',
+  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+  mode: AnimatedTextMode.loop,
+  direction: CirclingDirection.clockwise,
+  minLetterPadding: 2,
+)
 ```
 
 ### MarqueeText

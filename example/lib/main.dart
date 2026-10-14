@@ -49,10 +49,7 @@ class ExampleHomePage extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('my_animated_text'),
-        centerTitle: false,
-      ),
+      appBar: AppBar(title: const Text('my_animated_text'), centerTitle: false),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
@@ -66,13 +63,14 @@ class ExampleHomePage extends StatelessWidget {
                     'clean multi-effect composition, new blur/flip/shake effects, '
                     'and ready-to-use text widgets.',
                 tags: const ['Fluent API', 'Multi-effect', 'New effects'],
-                child: 'Build smoother text motion'.animate(
-                  style: _headlineStyle.copyWith(
-                    color: theme.colorScheme.onSurface,
-                  ),
-                  duration: const Duration(milliseconds: 2800),
-                  mode: AnimatedTextMode.loop,
-                )
+                child: 'Build smoother text motion'
+                    .animate(
+                      style: _headlineStyle.copyWith(
+                        color: theme.colorScheme.onSurface,
+                      ),
+                      duration: const Duration(milliseconds: 2800),
+                      mode: AnimatedTextMode.loop,
+                    )
                     .fade(
                       duration: const Duration(milliseconds: 420),
                       advanceCursor: false,
@@ -96,6 +94,61 @@ class ExampleHomePage extends StatelessWidget {
               ),
               const SizedBox(height: 28),
               DemoSection(
+                title: 'Scramble reveal',
+                subtitle:
+                    'Decode short headlines with deterministic symbols. Choose the reveal order or compose it with other effects.',
+                children: [
+                  DemoCard(
+                    title: 'ScrambleText',
+                    caption:
+                        'A complete reveal widget with a seeded random order.',
+                    child: ScrambleText(
+                      'MAKE EVERY WORD COUNT',
+                      style: _compactDemoTextStyle.copyWith(
+                        fontFamily: 'monospace',
+                        color: theme.colorScheme.primary,
+                      ),
+                      duration: const Duration(milliseconds: 2800),
+                      mode: AnimatedTextMode.loop,
+                      reveal: ScrambleReveal.random,
+                      seed: 17,
+                    ),
+                  ),
+                  DemoCard(
+                    title: 'Fluent scramble',
+                    caption:
+                        'Resolve from the right, then hold the finished text.',
+                    child: 'FLUENT BY DESIGN'
+                        .animate(
+                          style: _compactDemoTextStyle.copyWith(
+                            fontFamily: 'monospace',
+                          ),
+                          duration: const Duration(milliseconds: 3600),
+                        )
+                        .scramble(
+                          reveal: ScrambleReveal.rightToLeft,
+                          duration: const Duration(milliseconds: 2200),
+                        ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 28),
+              DemoSection(
+                title: 'Animated phrase carousel',
+                subtitle:
+                    'Rotate headlines or status messages automatically, pause on hover, '
+                    'and use a key to move between phrases manually.',
+                children: const [
+                  DemoCard(
+                    title: 'Rotating product highlights',
+                    caption:
+                        'Each phrase fades and slides into place. Use the controls or wait for the next phrase.',
+                    child: _CarouselDemo(),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 28),
+              DemoSection(
                 title: 'Fluent composition',
                 subtitle:
                     'Use animate() when you want readable timelines and flexible '
@@ -105,10 +158,11 @@ class ExampleHomePage extends StatelessWidget {
                     title: 'Polished entrance',
                     caption:
                         'Fade, slide, scale, and shimmer at the same time for a clean hero-style reveal.',
-                    child: 'Elegant entrance'.animate(
-                      style: _demoTextStyle,
-                      duration: const Duration(milliseconds: 2300),
-                    )
+                    child: 'Elegant entrance'
+                        .animate(
+                          style: _demoTextStyle,
+                          duration: const Duration(milliseconds: 2300),
+                        )
                         .fade(
                           duration: const Duration(milliseconds: 420),
                           advanceCursor: false,
@@ -134,10 +188,11 @@ class ExampleHomePage extends StatelessWidget {
                     title: 'Guided sequence',
                     caption:
                         'Use then() to keep the animation readable when each effect starts after the previous one.',
-                    child: 'Timeline is easy'.animate(
-                      style: _demoTextStyle,
-                      duration: const Duration(milliseconds: 3000),
-                    )
+                    child: 'Timeline is easy'
+                        .animate(
+                          style: _demoTextStyle,
+                          duration: const Duration(milliseconds: 3000),
+                        )
                         .fade(duration: const Duration(milliseconds: 280))
                         .then(delay: const Duration(milliseconds: 120))
                         .scale(
@@ -155,12 +210,13 @@ class ExampleHomePage extends StatelessWidget {
                     title: 'Neon headline',
                     caption:
                         'Shadow and gradient-driven motion works well for more expressive brand or splash text.',
-                    child: 'Night mode energy'.animate(
-                      style: _demoTextStyle.copyWith(
-                        color: theme.colorScheme.primary,
-                      ),
-                      duration: const Duration(milliseconds: 3200),
-                    )
+                    child: 'Night mode energy'
+                        .animate(
+                          style: _demoTextStyle.copyWith(
+                            color: theme.colorScheme.primary,
+                          ),
+                          duration: const Duration(milliseconds: 3200),
+                        )
                         .fade(
                           duration: const Duration(milliseconds: 320),
                           advanceCursor: false,
@@ -181,11 +237,14 @@ class ExampleHomePage extends StatelessWidget {
                     title: 'Character + widget mix',
                     caption:
                         'Combine typewriter with widget-level effects for reveal animations that still feel lightweight.',
-                    child: 'Launch your next message'.animate(
-                      style: _demoTextStyle,
-                      duration: const Duration(milliseconds: 3200),
-                    )
-                        .typewriter(duration: const Duration(milliseconds: 1200))
+                    child: 'Launch your next message'
+                        .animate(
+                          style: _demoTextStyle,
+                          duration: const Duration(milliseconds: 3200),
+                        )
+                        .typewriter(
+                          duration: const Duration(milliseconds: 1200),
+                        )
                         .then(delay: const Duration(milliseconds: 80))
                         .shadow(
                           blurEnd: 14,
@@ -201,10 +260,11 @@ class ExampleHomePage extends StatelessWidget {
                     title: 'Glass flip reveal',
                     caption:
                         'Blur, flip, and shimmer combine into a more dramatic reveal without losing composition control.',
-                    child: 'Flip into focus'.animate(
-                      style: _demoTextStyle,
-                      duration: const Duration(milliseconds: 2800),
-                    )
+                    child: 'Flip into focus'
+                        .animate(
+                          style: _demoTextStyle,
+                          duration: const Duration(milliseconds: 2800),
+                        )
                         .blur(
                           beginSigma: 18,
                           endSigma: 0,
@@ -281,22 +341,23 @@ class ExampleHomePage extends StatelessWidget {
                     title: 'Preset + continue',
                     caption:
                         'Start with withEffects() and switch into compose() for more timeline control.',
-                    child: BouncingText(
-                      'Flexible API flow',
-                      style: _compactDemoTextStyle,
-                      duration: const Duration(milliseconds: 2600),
-                      mode: AnimatedTextMode.loop,
-                    )
-                        .withEffects(const [
-                          FadeEffect(begin: 0.0, end: 0.25),
-                          ColorizeEffect(begin: 0.2, end: 1.0),
-                        ])
-                        .compose()
-                        .then(delay: const Duration(milliseconds: 150))
-                        .shimmer(
-                          duration: const Duration(milliseconds: 900),
-                          advanceCursor: false,
-                        ),
+                    child:
+                        BouncingText(
+                              'Flexible API flow',
+                              style: _compactDemoTextStyle,
+                              duration: const Duration(milliseconds: 2600),
+                              mode: AnimatedTextMode.loop,
+                            )
+                            .withEffects(const [
+                              FadeEffect(begin: 0.0, end: 0.25),
+                              ColorizeEffect(begin: 0.2, end: 1.0),
+                            ])
+                            .compose()
+                            .then(delay: const Duration(milliseconds: 150))
+                            .shimmer(
+                              duration: const Duration(milliseconds: 900),
+                              advanceCursor: false,
+                            ),
                   ),
                 ],
               ),
@@ -349,7 +410,8 @@ class ExampleHomePage extends StatelessWidget {
                   ),
                   DemoCard(
                     title: 'ShadowText',
-                    caption: 'Depth and glow without changing the text content.',
+                    caption:
+                        'Depth and glow without changing the text content.',
                     child: ShadowText(
                       'Soft depth layer',
                       style: _compactDemoTextStyle.copyWith(
@@ -369,7 +431,8 @@ class ExampleHomePage extends StatelessWidget {
                   ),
                   DemoCard(
                     title: 'BlurText',
-                    caption: 'Bring text into focus for cinematic reveals and hero copy.',
+                    caption:
+                        'Bring text into focus for cinematic reveals and hero copy.',
                     child: BlurText(
                       'Focus from blur',
                       style: _compactDemoTextStyle,
@@ -378,7 +441,8 @@ class ExampleHomePage extends StatelessWidget {
                   ),
                   DemoCard(
                     title: 'FlipText',
-                    caption: 'A 3D-style card flip effect for punchier entrances.',
+                    caption:
+                        'A 3D-style card flip effect for punchier entrances.',
                     child: FlipText(
                       'Flip to reveal',
                       style: _compactDemoTextStyle,
@@ -425,7 +489,8 @@ class ExampleHomePage extends StatelessWidget {
                   ),
                   DemoCard(
                     title: 'BouncingText',
-                    caption: 'Characters bounce one after another for playful motion.',
+                    caption:
+                        'Characters bounce one after another for playful motion.',
                     child: BouncingText(
                       'Bounce one by one',
                       style: _compactDemoTextStyle,
@@ -443,7 +508,8 @@ class ExampleHomePage extends StatelessWidget {
                   ),
                   DemoCard(
                     title: 'ColorizedText',
-                    caption: 'Cycle through multiple colors for vibrant labels.',
+                    caption:
+                        'Cycle through multiple colors for vibrant labels.',
                     child: ColorizedText(
                       'Dynamic palette',
                       style: _compactDemoTextStyle,
@@ -452,7 +518,8 @@ class ExampleHomePage extends StatelessWidget {
                   ),
                   DemoCard(
                     title: 'WavingGradientText',
-                    caption: 'A flowing gradient works well for promotional copy.',
+                    caption:
+                        'A flowing gradient works well for promotional copy.',
                     child: WavingGradientText(
                       'Gradient in motion',
                       style: _compactDemoTextStyle,
@@ -469,7 +536,8 @@ class ExampleHomePage extends StatelessWidget {
                 children: [
                   DemoCard(
                     title: 'CirclingText',
-                    caption: 'Text arranged around a circular path for logos or loading states.',
+                    caption:
+                        'Text arranged around a circular path for logos or loading states.',
                     child: Center(
                       child: CirclingText(
                         'Spin around',
@@ -495,6 +563,59 @@ class ExampleHomePage extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _CarouselDemo extends StatefulWidget {
+  const _CarouselDemo();
+
+  @override
+  State<_CarouselDemo> createState() => _CarouselDemoState();
+}
+
+class _CarouselDemoState extends State<_CarouselDemo> {
+  static const _phrases = [
+    'Create expressive headlines',
+    'Guide attention with motion',
+    'Keep every message readable',
+  ];
+
+  final _carouselKey = GlobalKey<AnimatedTextCarouselState>();
+  int _index = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        AnimatedTextCarousel(
+          key: _carouselKey,
+          phrases: _phrases,
+          interval: const Duration(seconds: 2),
+          transitionDuration: const Duration(milliseconds: 400),
+          direction: Axis.vertical,
+          pauseOnHover: true,
+          style: ExampleHomePage._compactDemoTextStyle,
+          onChanged: (index) => setState(() => _index = index),
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            IconButton(
+              tooltip: 'Previous phrase',
+              onPressed: () => _carouselKey.currentState?.previous(),
+              icon: const Icon(Icons.arrow_back),
+            ),
+            Text('${_index + 1} / ${_phrases.length}'),
+            IconButton(
+              tooltip: 'Next phrase',
+              onPressed: () => _carouselKey.currentState?.next(),
+              icon: const Icon(Icons.arrow_forward),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -541,9 +662,7 @@ class _HeroCard extends StatelessWidget {
           Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: [
-              for (final tag in tags) _TagChip(label: tag),
-            ],
+            children: [for (final tag in tags) _TagChip(label: tag)],
           ),
           if (tags.isNotEmpty) const SizedBox(height: 16),
           Text(

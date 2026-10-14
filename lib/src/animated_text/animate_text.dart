@@ -13,6 +13,7 @@ import '../effects/fade_effect.dart';
 import '../effects/falling_effect.dart';
 import '../effects/marquee_effect.dart';
 import '../effects/rotation_effect.dart';
+import '../effects/scramble_effect.dart';
 import '../effects/scale_effect.dart';
 import '../effects/shadow_effect.dart';
 import '../effects/shimmer_effect.dart';
@@ -162,6 +163,31 @@ extension AnimateTextStringExtension on String {
 }
 
 extension AnimateTextEffectsExtension on AnimateText {
+  /// Reveals the text through changing symbols.
+  AnimateText scramble({
+    String symbols = ScrambleEffect.defaultSymbols,
+    ScrambleReveal reveal = ScrambleReveal.leftToRight,
+    int seed = 0,
+    double cyclesPerSecond = 24,
+    Duration delay = Duration.zero,
+    Duration? duration,
+    Curve curve = Curves.linear,
+    bool advanceCursor = true,
+  }) {
+    return addEffect(
+      ScrambleEffect(
+        symbols: symbols,
+        reveal: reveal,
+        seed: seed,
+        cyclesPerSecond: cyclesPerSecond,
+      ),
+      delay: delay,
+      effectDuration: duration,
+      curve: curve,
+      advanceCursor: advanceCursor,
+    );
+  }
+
   AnimateText fade({
     Duration delay = Duration.zero,
     Duration? duration,
@@ -337,10 +363,7 @@ extension AnimateTextEffectsExtension on AnimateText {
     bool advanceCursor = true,
   }) {
     return addEffect(
-      RotationEffect(
-        rotationDirection: direction,
-        rotationDegrees: degrees,
-      ),
+      RotationEffect(rotationDirection: direction, rotationDegrees: degrees),
       delay: delay,
       effectDuration: duration,
       curve: curve,
@@ -446,10 +469,7 @@ extension AnimateTextEffectsExtension on AnimateText {
     bool advanceCursor = true,
   }) {
     return addEffect(
-      CirclingEffect(
-        direction: direction,
-        minLetterPadding: minLetterPadding,
-      ),
+      CirclingEffect(direction: direction, minLetterPadding: minLetterPadding),
       delay: delay,
       effectDuration: duration,
       curve: curve,

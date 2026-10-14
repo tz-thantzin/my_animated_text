@@ -1,5 +1,5 @@
 name: example
-description: "A Flutter example project demonstrating all the animated text widgets from my_animated_text, showcasing SlideText, TypewriterText, WaveMotionText, WavingGradientText, ShimmerText, FadeText, ScaleText, RotationText, MarqueeText, FallingText, and ColorizedText with different styles and animation modes."
+description: "A Flutter example project demonstrating my_animated_text effects, fluent composition, and the AnimatedTextCarousel phrase rotator."
 version: 0.0.1+1
 publish_to: none
 

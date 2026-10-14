@@ -1,4 +1,5 @@
 export 'animate_text.dart';
+export 'animated_text_carousel.dart';
 export 'blur_text.dart';
 export 'bouncing_text.dart';
 export 'circling_text.dart';
@@ -9,6 +10,7 @@ export 'flip_text.dart';
 export 'marquee_text.dart';
 export 'multi_animated_text.dart';
 export 'rotation_text.dart';
+export 'scramble_text.dart';
 export 'scale_text.dart';
 export 'shadow_text.dart';
 export 'shake_text.dart';
